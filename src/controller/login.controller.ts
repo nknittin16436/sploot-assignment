@@ -9,32 +9,47 @@ export class LoginController {
         this.loginService = loginService;
     }
 
-    public async signUpUser(req: Request, res: Response) {
+    public async signUpUser(req: Request, res: Response, next: NextFunction) {
         try {
             const createUserData = req.body;
-            const resp = await this.loginService.createUser(createUserData);
-            res.status(201).json({ success: true, resp, message: "User created Succesfully" })
+            const { error, data } = await this.loginService.createUser(createUserData);
+            console.log(error, data)
+            if (error) {
+                return next(error);
+            }
+            res.status(201).json({ statusCode: 201, data, message: "User created Succesfully" })
         } catch (error: any) {
-            res.status(400).json({ success: false, message: error.message })
+            console.log(error)
+            next(error)
         }
     }
 
     public async loginUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const { accessToken, error } = await this.loginService.loginUser(req.body);
-            res.status(200).json({ success: true, accessToken, message: "User logged in succesfully" })
+            const { data, error } = await this.loginService.loginUser(req.body);
+            if (error) {
+                return next(error);
+            }
+            res.status(200).json({ statusCode: 200, data, message: "User Logged In Succesfully" })
+
         } catch (error: any) {
-            res.status(400).json({ success: false, message: error.message })
+            next(error)
         }
     }
 
     public async updateUser(req: Request, res: Response, next: NextFunction) {
-        // try {
-        //     const { accessToken, error } = await this.loginService.updateUser(req.body);
-        //     res.status(201).json({ success: true, accessToken, message: "User logged in succesfully" })
-        // } catch (error: any) {
-        //     res.status(400).json({ success: false, message: error.message })
-        // }
+        try {
+            if (req.body.email || req.body.password) {
+                return next({ message: "Cannot update Email and Passsword", statusCode: 400 })
+            }
+            const updateUserData = req.body;
+            const userIdToBeUpdated = req.params.userId;
+            console.log(updateUserData, userIdToBeUpdated)
+            const { error, data } = await this.loginService.updateUser(updateUserData, userIdToBeUpdated);
+            res.status(201).json({ success: true, data, message: "User Updated succesfully" })
+        } catch (error: any) {
+            next(error)
+        }
     }
 
 }
