@@ -13,7 +13,6 @@ export class LoginController {
         try {
             const createUserData = req.body;
             const { error, data } = await this.loginService.createUser(createUserData);
-            console.log(error, data)
             if (error) {
                 return next(error);
             }
@@ -44,7 +43,6 @@ export class LoginController {
             }
             const updateUserData = req.body;
             const userIdToBeUpdated = req.params.userId;
-            console.log(updateUserData, userIdToBeUpdated)
             const { error, data } = await this.loginService.updateUser(updateUserData, userIdToBeUpdated);
             if (error) {
                 return next(error)

@@ -13,6 +13,5 @@ export const getJWTToken = (user: IUser) => {
 export const getUserFromToken = async (authorizationToken: string) => {
     const jwtToken = authorizationToken.substring('Bearer '.length);
     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET as string) as any;
-    console.log(decoded);
-    return decoded.userId
+    return decoded.userId;
 }

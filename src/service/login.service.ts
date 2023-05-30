@@ -1,10 +1,8 @@
-import mongoose from "mongoose";
 import User, { IUser } from "../models/User";
 import { ILoginData, UpdateUserData } from "../util/user.dto";
 import { getJWTToken } from "../util/user.util";
 import * as bcrypt from 'bcryptjs';
 
-const oneHour = 3600000;
 export class LoginService {
 
     public async createUser(createUserData: IUser) {
@@ -26,9 +24,7 @@ export class LoginService {
 
     public async loginUser(loginData: ILoginData) {
         const { email, password } = loginData;
-        console.log(email, password)
         const user = await User.findOne({ email });
-        console.log(user)
         if (user && bcrypt.compareSync(password, user.password)) {
             const accessToken = getJWTToken(user);
             return { data: { accessToken, success: true } };
@@ -38,7 +34,6 @@ export class LoginService {
 
     public async updateUser(updateUserData: UpdateUserData, userIdToBeUpdated: any) {
         const user = await User.findById(userIdToBeUpdated);
-        console.log(user);
         if (!user) {
             return {
                 error: {
@@ -47,7 +42,6 @@ export class LoginService {
                 }
             }
         }
-        console.log(userIdToBeUpdated)
         await User.findByIdAndUpdate(userIdToBeUpdated, updateUserData);
         return { data: { success: true, message: "User updated succesfully" } }
     }

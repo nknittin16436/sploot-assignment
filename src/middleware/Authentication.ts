@@ -4,7 +4,6 @@ import * as JWT from 'jsonwebtoken';
 
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
     const authorization: string | undefined = req?.headers?.authorization;
-    console.log(authorization)
     if (authorization && authorization.includes('Bearer')) {
         const jwtToken = authorization.substring('Bearer '.length);
         const user = await validateJWTToken(jwtToken, next);
@@ -24,7 +23,6 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
 export const validateJWTToken = async (jwtToken: string, next: NextFunction) => {
     try {
         const decoded = JWT.verify(jwtToken, process.env.JWT_SECRET as string) as any;
-        console.log(decoded);
         const user = await User.findById(decoded.userId);
         if (!user) {
             return undefined;
