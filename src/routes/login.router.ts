@@ -1,11 +1,9 @@
 import express, { NextFunction, Request } from 'express';
 import { Container } from 'typescript-ioc';
 import { LoginController } from '../controller/login.controller';
-import { authenticateUser, authorizeUser } from '../middleware/Authentication';
-
+import { authenticateUser } from '../middleware/Authentication';
 import { Response } from 'express-serve-static-core';
 import { loginSchema, signupSchema, updateUserSchema } from '../util/validationSchema';
-import validateData from '../middleware/Validator';
 import { validationResult } from 'express-validator';
 
 const router = express.Router();
@@ -36,7 +34,7 @@ router.post("/login",
     });
 router.patch("/users/:userId",
     updateUserSchema,
-    authorizeUser,
+    authenticateUser,
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);
         const errorMessages = errors.array();

@@ -8,7 +8,7 @@ const app: Express = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.get('/', (req, res) => {
-  res.send('Hey this is my Sploot running')
+  res.send('Hey this is my Sploot app running')
 })
 app.use("/api", LoginRouter);
 app.use("/api", ArticleRouter)

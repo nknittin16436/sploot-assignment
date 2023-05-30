@@ -1,6 +1,5 @@
 import express from 'express';
 import { Container } from 'typescript-ioc';
-import { LoginController } from '../controller/login.controller';
 import { authenticateUser } from '../middleware/Authentication';
 import { ArticleController } from '../controller/article.controller';
 import { createArticleSchema } from '../util/validationSchema';
@@ -12,7 +11,7 @@ const router = express.Router();
 
 const articleController: ArticleController = Container.get(ArticleController);
 
-router.post("/users/:userId/articles", createArticleSchema, (req: Request, res: Response, next: NextFunction) => {
+router.post("/users/:userId/articles", createArticleSchema, authenticateUser, (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     const errorMessages = errors.array().map((error) => error.msg);
     if (!errors.isEmpty()) {
@@ -21,7 +20,7 @@ router.post("/users/:userId/articles", createArticleSchema, (req: Request, res: 
     articleController.createArticle(req, res, next);
 });
 
-router.get("/articles", (req: Request, res: Response, next: NextFunction) => {
+router.get("/articles", authenticateUser, (req: Request, res: Response, next: NextFunction) => {
     articleController.getArticles(req, res, next);
 });
 

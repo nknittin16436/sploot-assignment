@@ -46,6 +46,9 @@ export class LoginController {
             const userIdToBeUpdated = req.params.userId;
             console.log(updateUserData, userIdToBeUpdated)
             const { error, data } = await this.loginService.updateUser(updateUserData, userIdToBeUpdated);
+            if (error) {
+                return next(error)
+            }
             res.status(201).json({ success: true, data, message: "User Updated succesfully" })
         } catch (error: any) {
             next(error)

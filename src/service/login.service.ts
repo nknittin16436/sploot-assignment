@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import User from "../models/User";
-import { ILoginData, IUser, UpdateUserData } from "../util/user.dto";
+import User, { IUser } from "../models/User";
+import { ILoginData, UpdateUserData } from "../util/user.dto";
 import { getJWTToken } from "../util/user.util";
 import * as bcrypt from 'bcryptjs';
 
@@ -48,7 +48,7 @@ export class LoginService {
             }
         }
         console.log(userIdToBeUpdated)
-        const updatedUser = await User.findByIdAndUpdate(userIdToBeUpdated, updateUserData, { new: true });
+        await User.findByIdAndUpdate(userIdToBeUpdated, updateUserData);
         return { data: { success: true, message: "User updated succesfully" } }
     }
 }
