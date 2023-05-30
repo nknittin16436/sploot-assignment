@@ -15,7 +15,7 @@ export class ArticleController {
             const authorizationToken = req.headers.authorization as string;
             const userId = await getUserFromToken(authorizationToken);
             const article = await this.articleService.createArticle(createArticelData, userId);
-            res.status(201).json({ statusCode: 201, data: { article }, message: "Article created Succesfully" })
+            res.status(201).json({ statusCode: 201, data: article, message: "Article created Succesfully" })
         } catch (error: any) {
             next(error)
         }

@@ -10,7 +10,6 @@ export class ArticleService {
 
     async createArticle(createArticelData: IArticle, creatingUserId: string) {
         const article = await Article.create({ ...createArticelData, createdBy: creatingUserId });
-        console.log(article);
         return { article, success: true };
     }
 }
